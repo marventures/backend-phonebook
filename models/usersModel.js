@@ -1,24 +1,24 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Name is required"],
+      required: [true, 'Name is required'],
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: [true, 'Password is required'],
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      required: [true, 'Email is required'],
       unique: true,
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
-      default: "starter",
+      enum: ['starter', 'pro', 'business'],
+      default: 'starter',
     },
     token: {
       type: String,
@@ -28,6 +28,6 @@ const userSchema = new Schema(
   { versionKey: false }
 );
 
-const User = model("user", userSchema);
+const User = model('user', userSchema);
 
 export { User };

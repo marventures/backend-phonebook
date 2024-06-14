@@ -1,8 +1,8 @@
-import express from "express";
-import { ctrlWrapper } from "../../helpers/ctrlWrapper.js";
+import express from 'express';
+import { ctrlWrapper } from '../../helpers/ctrlWrapper.js';
 // prettier-ignore
 import { signupUser, loginUser, logoutUser, getCurrentUsers, updateUserSubscription} from "../../controllers/usersController.js";
-import { authenticateToken } from "../../middlewares/authenticateToken.js";
+import { authenticateToken } from '../../middlewares/authenticateToken.js';
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ const router = express.Router();
   "password": "examplepassword"
 }
 */
-router.post("/signup", ctrlWrapper(signupUser));
+router.post('/signup', ctrlWrapper(signupUser));
 
 /* POST: // http://localhost:3000/api/users/login
 {
@@ -21,13 +21,13 @@ router.post("/signup", ctrlWrapper(signupUser));
   "password": "examplepassword"
 }
 */
-router.post("/login", ctrlWrapper(loginUser));
+router.post('/login', ctrlWrapper(loginUser));
 
 /* GET: // http://localhost:3000/api/users/logout */
-router.get("/logout", authenticateToken, ctrlWrapper(logoutUser));
+router.get('/logout', authenticateToken, ctrlWrapper(logoutUser));
 
 /* GET: // http://localhost:3000/api/users/current */
-router.get("/current", authenticateToken, ctrlWrapper(getCurrentUsers));
+router.get('/current', authenticateToken, ctrlWrapper(getCurrentUsers));
 
-router.patch("/", authenticateToken, ctrlWrapper(updateUserSubscription));
+router.patch('/', authenticateToken, ctrlWrapper(updateUserSubscription));
 export { router };

@@ -1,10 +1,10 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import "dotenv/config";
-import { User } from "../models/usersModel.js";
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import 'dotenv/config';
+import { User } from '../models/usersModel.js';
 // prettier-ignore
 import { signupValidation, loginValidation, subscriptionValidation } from "../validations/validation.js";
-import { httpError } from "../helpers/httpError.js";
+import { httpError } from '../helpers/httpError.js';
 
 const { SECRET_KEY } = process.env;
 
@@ -20,7 +20,7 @@ const signupUser = async (req, res) => {
   // Registration conflict error
   const user = await User.findOne({ email });
   if (user) {
-    throw httpError(409, "Email in Use");
+    throw httpError(409, 'Email in Use');
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
@@ -49,17 +49,17 @@ const loginUser = async (req, res) => {
   // Login auth error (email)
   const user = await User.findOne({ email });
   if (!user) {
-    throw httpError(401, "Email or password is wrong");
+    throw httpError(401, 'Email or password is wrong');
   }
 
   // Login auth error (password)
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
-    throw httpError(401, "Email or password is wrong");
+    throw httpError(401, 'Email or password is wrong');
   }
 
   const payload = { id: user._id };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
 
   await User.findByIdAndUpdate(user._id, { token });
 
@@ -77,7 +77,7 @@ const logoutUser = async (req, res) => {
   const { _id } = req.user;
 
   // Logout unauthorized error (setting token to empty string will remove token -> will logout)
-  await User.findByIdAndUpdate(_id, { token: "" });
+  await User.findByIdAndUpdate(_id, { token: '' });
 
   //   Logout success response
   res.status(204).send();
