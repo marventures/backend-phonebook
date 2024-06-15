@@ -9,7 +9,7 @@ import { httpError } from '../helpers/httpError.js';
 const { SECRET_KEY } = process.env;
 
 const signupUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   //  Registration validation error
   const { error } = signupValidation.validate(req.body);
@@ -25,12 +25,13 @@ const signupUser = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ name, email, password: hashPassword });
+  const newUser = await User.create({ firstName, lastName, email, password: hashPassword });
 
   // Registration success response
   res.status(201).json({
     user: {
-      name: newUser.name,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
       email: newUser.email,
       subscription: newUser.subscription,
     },

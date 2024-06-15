@@ -14,7 +14,20 @@ const favoriteValidation = Joi.object({
 
 // validation for signup
 const signupValidation = Joi.object({
-  name: Joi.string().required(),
+  firstName: Joi.string()
+    .pattern(/^[A-Za-z]+$/)
+    .required()
+    .messages({
+      'string.pattern.base': 'First name must only contain alphabet letters',
+      'any.required': 'Missing required first name field',
+    }),
+  lastName: Joi.string()
+    .pattern(/^[A-Za-z]+$/)
+    .required()
+    .messages({
+      'string.pattern.base': 'Last name must only contain alphabet letters',
+      'any.required': 'Missing required last name field',
+    }),
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required()
