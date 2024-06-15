@@ -44,7 +44,7 @@ const loginUser = async (req, res) => {
   //  Login validation error
   const { error } = loginValidation.validate(req.body);
   if (error) {
-    throw httpError(401, error.message);
+    throw httpError(400, error.message);
   }
 
   // Login auth error (email)
