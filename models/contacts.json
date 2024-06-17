@@ -1,62 +1,62 @@
 [
   {
-    "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792",
+    "name": "Juan dela Cruz",
+    "email": "juan.delacruz@example.com",
+    "phone": "+63 (912) 345 6789",
     "favorite": false
   },
   {
-    "name": "Chaim Lewis",
-    "email": "dui.in@egetlacus.ca",
-    "phone": "(294) 840-6685",
+    "name": "Maria Santos",
+    "email": "maria.santos@example.com",
+    "phone": "+63 (998) 765 4321",
     "favorite": true
   },
   {
-    "name": "Kennedy Lane",
-    "email": "mattis.Cras@nonenimMauris.net",
-    "phone": "(542) 451-7038",
+    "name": "Jose Rizal",
+    "email": "jose.rizal@example.com",
+    "phone": "+63 (917) 234 5678",
     "favorite": false
   },
   {
-    "name": "Wylie Pope",
-    "email": "est@utquamvel.net",
-    "phone": "(692) 802-2949",
+    "name": "Luzviminda Magtanggol",
+    "email": "luzviminda.magtanggol@example.com",
+    "phone": "+63 (925) 876 5432",
     "favorite": true
   },
   {
-    "name": "Cyrus Jackson",
-    "email": "nibh@semsempererat.com",
-    "phone": "(501) 472-5218",
+    "name": "Andres Bonifacio",
+    "email": "andres.bonifacio@example.com",
+    "phone": "+63 (933) 456 7890",
     "favorite": true
   },
   {
-    "name": "Abbot Franks",
-    "email": "scelerisque@magnis.org",
-    "phone": "(186) 568-3720",
-    "favorite": true
-  },
-  {
-    "name": "Reuben Henry",
-    "email": "pharetra.ut@dictum.co.uk",
-    "phone": "(715) 598-5792",
-    "favorite": true
-  },
-  {
-    "name": "Simon Morton",
-    "email": "dui.Fusce.diam@Donec.com",
-    "phone": "(233) 738-2360",
-    "favorite": true
-  },
-  {
-    "name": "Thomas Lucas",
-    "email": "nec@Nulla.com",
-    "phone": "(704) 398-7993",
+    "name": "Emilio Aguinaldo",
+    "email": "emilio.aguinaldo@example.com",
+    "phone": "+63 (919) 987 6543",
     "favorite": false
   },
   {
-    "name": "Alec Howard",
-    "email": "Donec.elementum@scelerisquescelerisquedui.net",
-    "phone": "(748) 206-2688",
+    "name": "Melchora Aquino",
+    "email": "melchora.aquino@example.com",
+    "phone": "+63 (926) 543 2109",
+    "favorite": false
+  },
+  {
+    "name": "Gabriela Silang",
+    "email": "gabriela.silang@example.com",
+    "phone": "+63 (932) 678 9012",
     "favorite": true
+  },
+  {
+    "name": "Josefa Llanes Escoda",
+    "email": "josefa.llanesescoda@example.com",
+    "phone": "+63 (920) 321 0987",
+    "favorite": true
+  },
+  {
+    "name": "Antonio Luna",
+    "email": "antonio.luna@example.com",
+    "phone": "+63 (935) 789 0123",
+    "favorite": false
   }
 ]
