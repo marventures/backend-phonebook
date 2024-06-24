@@ -131,16 +131,38 @@ const updateUser = async (req, res) => {
     }
   }
 
-  const updatedUser = await User.findByIdAndUpdate(_id, req.body, {
-    new: true,
-  });
+  const { path: oldPath, originalname } = req.file;
+
+  await Jimp.read(oldPath).then(image =>
+    // image.resize(250, 250).write(oldPath)
+    image.cover(250, 250).write(oldPath)
+  );
+
+  const extension = path.extname(originalname);
+  const filename = `${_id}${extension}`;
+
+  const newPath = path.join('public', 'avatars', filename);
+  await fs.rename(oldPath, newPath);
+
+  let avatarURL = path.join('/avatars', filename);
+  avatarURL = avatarURL.replace(/\\/g, '/');
+
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    { ...req.body, avatarURL },
+    {
+      new: true,
+    }
+  );
+
+  console.log(updatedUser);
 
   res.json({
     user: {
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
       email: updatedUser.email,
-      avatarURL: updatedUser.avatarURL,
+      avatarURL,
     },
   });
 };
@@ -164,27 +186,5 @@ const updateUserSubscription = async (req, res) => {
   });
 };
 
-const updateAvatar = async (req, res) => {
-  const { _id } = req.user;
-  const { path: oldPath, originalname } = req.file;
-
-  await Jimp.read(oldPath).then(image =>
-    // image.resize(250, 250).write(oldPath)
-    image.cover(250, 250).write(oldPath)
-  );
-
-  const extension = path.extname(originalname);
-  const filename = `${_id}${extension}`;
-
-  const newPath = path.join('public', 'avatars', filename);
-  await fs.rename(oldPath, newPath);
-
-  let avatarURL = path.join('/avatars', filename);
-  avatarURL = avatarURL.replace(/\\/g, '/');
-
-  await User.findByIdAndUpdate(_id, { avatarURL });
-  res.status(200).json({ user: { avatarURL } });
-};
-
 // prettier-ignore
-export { signupUser, loginUser, logoutUser, getCurrentUsers, updateUserSubscription, updateAvatar, updateUser };
+export { signupUser, loginUser, logoutUser, getCurrentUsers, updateUserSubscription,  updateUser };
