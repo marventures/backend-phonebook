@@ -86,6 +86,7 @@ const loginUser = async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       subscription: user.subscription,
+      avatarURL: user.avatarURL,
     },
   });
 };
