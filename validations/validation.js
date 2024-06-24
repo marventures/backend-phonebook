@@ -84,7 +84,6 @@ const profileValidation = Joi.object({
       'any.required': 'Missing required email field',
       'string.email': 'Invalid email format',
     }),
-  avatarURL: Joi.string(),
 });
 
 // prettier-ignore
