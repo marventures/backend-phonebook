@@ -1,5 +1,9 @@
 import bcrypt from 'bcryptjs';
+import gravatar from 'gravatar';
 import jwt from 'jsonwebtoken';
+import Jimp from 'jimp';
+import path from 'path';
+import fs from 'fs/promises';
 import 'dotenv/config';
 import { User } from '../models/usersModel.js';
 // prettier-ignore
@@ -25,7 +29,16 @@ const signupUser = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ firstName, lastName, email, password: hashPassword });
+  // Create a link to the user's avatar with gravatar
+  const avatarURL = gravatar.url(email, { protocol: 'https' });
+
+  const newUser = await User.create({
+    firstName,
+    lastName,
+    email,
+    password: hashPassword,
+    avatarURL,
+  });
 
   // Registration success response
   res.status(201).json({
@@ -34,6 +47,7 @@ const signupUser = async (req, res) => {
       lastName: newUser.lastName,
       email: newUser.email,
       subscription: newUser.subscription,
+      avatarURL: newUser.avatarURL,
     },
   });
 };
@@ -113,5 +127,27 @@ const updateUserSubscription = async (req, res) => {
   });
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: oldPath, originalname } = req.file;
+
+  await Jimp.read(oldPath).then(image =>
+    // image.resize(250, 250).write(oldPath)
+    image.cover(250, 250).write(oldPath)
+  );
+
+  const extension = path.extname(originalname);
+  const filename = `${_id}${extension}`;
+
+  const newPath = path.join('public', 'avatars', filename);
+  await fs.rename(oldPath, newPath);
+
+  let avatarURL = path.join('/avatars', filename);
+  avatarURL = avatarURL.replace(/\\/g, '/');
+
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  res.status(200).json({ avatarURL });
+};
+
 // prettier-ignore
-export { signupUser, loginUser, logoutUser, getCurrentUsers, updateUserSubscription };
+export { signupUser, loginUser, logoutUser, getCurrentUsers, updateUserSubscription, updateAvatar };
