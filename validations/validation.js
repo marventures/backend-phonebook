@@ -62,5 +62,29 @@ const subscriptionValidation = Joi.object({
   subscription: Joi.string().valid('starter', 'pro', 'business'),
 });
 
+const profileValidation = Joi.object({
+  firstName: Joi.string()
+    .pattern(/^[A-Za-z]+$/)
+    .required()
+    .messages({
+      'string.pattern.base': 'First name must only contain alphabet letters',
+      'any.required': 'Missing required first name field',
+    }),
+  lastName: Joi.string()
+    .pattern(/^[A-Za-z]+$/)
+    .required()
+    .messages({
+      'string.pattern.base': 'Last name must only contain alphabet letters',
+      'any.required': 'Missing required last name field',
+    }),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .required()
+    .messages({
+      'any.required': 'Missing required email field',
+      'string.email': 'Invalid email format',
+    }),
+});
+
 // prettier-ignore
-export { contactValidation, favoriteValidation, signupValidation, loginValidation, subscriptionValidation };
+export { contactValidation, favoriteValidation, signupValidation, loginValidation, subscriptionValidation, profileValidation };

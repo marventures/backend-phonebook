@@ -7,7 +7,7 @@ import fs from 'fs/promises';
 import 'dotenv/config';
 import { User } from '../models/usersModel.js';
 // prettier-ignore
-import { signupValidation, loginValidation, subscriptionValidation } from "../validations/validation.js";
+import { signupValidation, loginValidation, subscriptionValidation, profileValidation } from "../validations/validation.js";
 import { httpError } from '../helpers/httpError.js';
 
 const { SECRET_KEY } = process.env;
@@ -102,11 +102,43 @@ const logoutUser = async (req, res) => {
 };
 
 const getCurrentUsers = async (req, res) => {
-  const { email, subscription } = req.user;
+  const { firstName, lastName, email, subscription } = req.user;
 
   res.json({
-    email,
-    subscription,
+    user: {
+      firstName,
+      lastName,
+      email,
+      subscription,
+    },
+  });
+};
+
+const updateUser = async (req, res) => {
+  const { error } = profileValidation.validate(req.body);
+  if (error) {
+    throw httpError(400, error.message);
+  }
+
+  // Update conflict error
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    throw httpError(409, 'Email in Use');
+  }
+
+  const { _id } = req.user;
+
+  const updatedUser = await User.findByIdAndUpdate(_id, req.body, {
+    new: true,
+  });
+
+  res.json({
+    user: {
+      firstName: updatedUser.firstName,
+      lastName: updatedUser.lastName,
+      email: updatedUser.email,
+    },
   });
 };
 
@@ -123,8 +155,9 @@ const updateUserSubscription = async (req, res) => {
   });
 
   res.json({
-    email: updatedUser.email,
-    subscription: updatedUser.subscription,
+    user: {
+      subscription: updatedUser.subscription,
+    },
   });
 };
 
@@ -147,8 +180,8 @@ const updateAvatar = async (req, res) => {
   avatarURL = avatarURL.replace(/\\/g, '/');
 
   await User.findByIdAndUpdate(_id, { avatarURL });
-  res.status(200).json({ avatarURL });
+  res.status(200).json({ user: { avatarURL } });
 };
 
 // prettier-ignore
-export { signupUser, loginUser, logoutUser, getCurrentUsers, updateUserSubscription, updateAvatar };
+export { signupUser, loginUser, logoutUser, getCurrentUsers, updateUserSubscription, updateAvatar, updateUser };
