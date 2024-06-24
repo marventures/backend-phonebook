@@ -120,14 +120,16 @@ const updateUser = async (req, res) => {
     throw httpError(400, error.message);
   }
 
-  // Update conflict error
+  const { _id, email: currentEmail } = req.user;
   const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (user) {
-    throw httpError(409, 'Email in Use');
-  }
 
-  const { _id } = req.user;
+  // Update conflict error
+  if (email !== currentEmail) {
+    const user = await User.findOne({ email });
+    if (user) {
+      throw httpError(409, 'Email in Use');
+    }
+  }
 
   const updatedUser = await User.findByIdAndUpdate(_id, req.body, {
     new: true,
@@ -138,6 +140,7 @@ const updateUser = async (req, res) => {
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
       email: updatedUser.email,
+      avatarURL: updatedUser.avatarURL,
     },
   });
 };
