@@ -63,6 +63,7 @@ const subscriptionValidation = Joi.object({
 });
 
 const profileValidation = Joi.object({
+  avatar: Joi.string(),
   firstName: Joi.string()
     .pattern(/^[A-Za-z]+$/)
     .required()

@@ -131,38 +131,33 @@ const updateUser = async (req, res) => {
     }
   }
 
-  const { path: oldPath, originalname } = req.file;
+  let avatarURL = req.user.avatarURL; // Default to current avatar URL
 
-  await Jimp.read(oldPath).then(image =>
-    // image.resize(250, 250).write(oldPath)
-    image.cover(250, 250).write(oldPath)
-  );
+  // Handle avatar update if a new file is uploaded
+  if (req.file) {
+    const { path: oldPath, originalname } = req.file;
 
-  const extension = path.extname(originalname);
-  const filename = `${_id}${extension}`;
+    await Jimp.read(oldPath).then(image => image.cover(250, 250).write(oldPath));
 
-  const newPath = path.join('public', 'avatars', filename);
-  await fs.rename(oldPath, newPath);
+    const extension = path.extname(originalname);
+    const filename = `${_id}${extension}`;
 
-  let avatarURL = path.join('/avatars', filename);
-  avatarURL = avatarURL.replace(/\\/g, '/');
+    const newPath = path.join('public', 'avatars', filename);
+    await fs.rename(oldPath, newPath);
 
-  const updatedUser = await User.findByIdAndUpdate(
-    _id,
-    { ...req.body, avatarURL },
-    {
-      new: true,
-    }
-  );
+    avatarURL = path.join('/avatars', filename);
+    avatarURL = avatarURL.replace(/\\/g, '/');
+  }
 
-  console.log(updatedUser);
+  // Update user information
+  const updatedUser = await User.findByIdAndUpdate(_id, { ...req.body, avatarURL }, { new: true });
 
   res.json({
     user: {
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
       email: updatedUser.email,
-      avatarURL,
+      avatarURL: updatedUser.avatarURL, // Return updated avatarURL if it was updated
     },
   });
 };
