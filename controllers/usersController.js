@@ -102,7 +102,7 @@ const logoutUser = async (req, res) => {
 };
 
 const getCurrentUsers = async (req, res) => {
-  const { firstName, lastName, email, subscription } = req.user;
+  const { avatarURL, firstName, lastName, email, subscription } = req.user;
 
   res.json({
     user: {
@@ -110,6 +110,7 @@ const getCurrentUsers = async (req, res) => {
       lastName,
       email,
       subscription,
+      avatarURL,
     },
   });
 };
