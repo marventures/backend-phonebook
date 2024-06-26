@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import Jimp from 'jimp';
 import path from 'path';
 import fs from 'fs/promises';
+import crypto from 'crypto';
 import 'dotenv/config';
 import { User } from '../models/usersModel.js';
 // prettier-ignore
@@ -140,8 +141,11 @@ const updateUser = async (req, res) => {
 
     await Jimp.read(oldPath).then(image => image.cover(250, 250).write(oldPath));
 
+    const timestamp = Date.now();
+    const randomString = crypto.randomBytes(16).toString('hex');
+
     const extension = path.extname(originalname);
-    const filename = `${_id}${extension}`;
+    const filename = `${timestamp}-${randomString}${extension}`;
 
     const newPath = path.join('public', 'avatars', filename);
     await fs.rename(oldPath, newPath);
