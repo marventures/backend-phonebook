@@ -6,12 +6,22 @@ import 'dotenv/config';
 
 const { SECRET_KEY } = process.env;
 
-const authenticateToken = async (req, res, next) => {
+const authenticateToken = async (req, _res, next) => {
   try {
-    const token = getCookie(req, 'jwt_token');
+    // Check the Authorization header
+    const [bearer, token] = req.headers.authorization.split(' ');
+
+    if (bearer !== 'Bearer') {
+      next(httpError(401, 'Not authorized'));
+    }
+
+    // If no token is found in the Authorization header, check cookies
+    if (!token) {
+      token = getCookie(req, 'jwt_token');
+    }
 
     if (!token) {
-      console.log('No token found in cookies');
+      console.log('No token found in Authorization header or cookies');
       return next(httpError(401, 'Not authorized'));
     }
 
