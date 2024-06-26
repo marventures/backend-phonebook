@@ -10,6 +10,7 @@ import { User } from '../models/usersModel.js';
 // prettier-ignore
 import { signupValidation, loginValidation, subscriptionValidation, profileValidation } from "../validations/validation.js";
 import { httpError } from '../helpers/httpError.js';
+import { setCookie, removeCookie } from '../helpers/cookie.js';
 
 const { SECRET_KEY } = process.env;
 
@@ -77,7 +78,9 @@ const loginUser = async (req, res) => {
   const payload = { id: user._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
 
+  // Set JWT token as a cookie
   await User.findByIdAndUpdate(user._id, { token });
+  setCookie(res, 'jwt_token', token);
 
   //   Login success response
   res.status(200).json({
@@ -95,8 +98,9 @@ const loginUser = async (req, res) => {
 const logoutUser = async (req, res) => {
   const { _id } = req.user;
 
-  // Logout unauthorized error (setting token to empty string will remove token -> will logout)
-  await User.findByIdAndUpdate(_id, { token: '' });
+  // Clear JWT token cookie on logout
+  await User.findByIdAndUpdate(_id, { token: null });
+  removeCookie(res, 'jwt_token');
 
   //   Logout success response
   res.status(204).send();
