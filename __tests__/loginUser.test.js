@@ -4,6 +4,7 @@ import { User } from '../models/usersModel.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { jest } from '@jest/globals';
+import gravatar from 'gravatar';
 
 describe('Test @POST /api/users/login', () => {
   const signInData = {
@@ -14,9 +15,12 @@ describe('Test @POST /api/users/login', () => {
   const mockUserId = 'mockUserId';
   const mockUser = {
     _id: mockUserId,
+    firstName: 'Marvin',
+    lastName: 'Pacis',
     email: signInData.email,
     password: bcrypt.hash(signInData.password, 10),
     subscription: 'starter',
+    avatarURL: gravatar.url(signInData.email, { protocol: 'https' }),
   };
 
   beforeAll(() => {
@@ -68,9 +72,13 @@ describe('Test @POST /api/users/login', () => {
     const { user } = response.body;
 
     // The response should return a user object with 2 fields email and subscription
-    expect(user).toHaveProperty('email' && 'subscription');
+    expect(user).toHaveProperty(
+      'email' && 'subscription' && 'firstName' && 'lastName' && 'avatarURL'
+    );
 
     // email and subscription, having the data type String
-    expect(user.email && user.subscription).toEqual(expect.any(String));
+    expect(
+      user.email && user.subscription && user.firstName && user.lastName && user.avatarURL
+    ).toEqual(expect.any(String));
   });
 });
