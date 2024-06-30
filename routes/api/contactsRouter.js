@@ -26,8 +26,8 @@ router.delete('/:contactId', authenticateToken, ctrlWrapper(deleteContactById));
 
 /* PUT: /api/contacts/:contactId 
     body: {
-        "name": "Joanna Shaw",
-        "email": "joannashaw@example.com",
+        "name": "Yenn Collins",
+        "email": "yenncollins@example.com",
         "number": "(639) 777-8819"
     } 
 */
