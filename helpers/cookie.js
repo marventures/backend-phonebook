@@ -1,20 +1,35 @@
 import { serialize, parse } from 'cookie';
 
-// Set cookie function
+/**
+ * Sets a cookie on the response object with the given key, value, and options.
+ *
+ * @param {Object} res - The response object.
+ * @param {string} key - The name of the cookie.
+ * @param {string} value - The value of the cookie.
+ * @param {Object} [options={}] - Additional options for setting the cookie.
+ * @param {number} [options.maxAge=86400] - The maximum age of the cookie in seconds (1 day by default).
+ * @returns {void}
+ */
 export const setCookie = (res, key, value, options = {}) => {
   const cookie = serialize(key, value, {
-    httpOnly: true, // Ensures the cookie is not accessible via JavaScript
+    httpOnly: true,
     path: '/',
-    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-    sameSite: 'strict', // Protects against CSRF
-    maxAge: options.maxAge || 86400, // Max age in seconds (1 day by default)
-    path: '/', // Allow the cookie to be sent on any request path
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: options.maxAge || 86400,
+    path: '/',
     ...options,
   });
   res.setHeader('Set-Cookie', cookie);
 };
 
-// Remove cookie function
+/**
+ * Removes a cookie by setting its expiration date to the past.
+ *
+ * @param {Object} res - The response object.
+ * @param {string} key - The name of the cookie to remove.
+ * @returns {void}
+ */
 export const removeCookie = (res, key) => {
   const cookie = serialize(key, '', {
     httpOnly: true,
@@ -26,7 +41,13 @@ export const removeCookie = (res, key) => {
   res.setHeader('Set-Cookie', cookie);
 };
 
-// Get cookie function
+/**
+ * Retrieves the value of a cookie from the request headers.
+ *
+ * @param {Object} req - The request object.
+ * @param {string} key - The name of the cookie to retrieve.
+ * @returns {string|null} The value of the cookie, or null if the cookie is not found.
+ */
 export const getCookie = (req, key) => {
   const cookies = req.headers.cookie || '';
   return parse(cookies)[key] || null;

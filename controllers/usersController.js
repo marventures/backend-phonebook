@@ -14,6 +14,21 @@ import { setCookie, removeCookie } from '../helpers/cookie.js';
 
 const { SECRET_KEY } = process.env;
 
+/**
+ * Handles user signup by validating input, checking for existing users,
+ * hashing the password, creating a new user, and returning a success response.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request.
+ * @param {string} req.body.firstName - The first name of the user.
+ * @param {string} req.body.lastName - The last name of the user.
+ * @param {string} req.body.email - The email of the user.
+ * @param {string} req.body.password - The password of the user.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} A promise that resolves with no value.
+ * @throws {Error} Will throw an error if validation fails or if the email is already in use.
+ */
+
 const signupUser = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
@@ -54,6 +69,18 @@ const signupUser = async (req, res) => {
   });
 };
 
+/**
+ * Handles user login by validating input, checking user credentials,
+ * generating a JWT token, setting it as a cookie, and returning a success response.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request.
+ * @param {string} req.body.email - The email of the user.
+ * @param {string} req.body.password - The password of the user.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} A promise that resolves with no value.
+ * @throws {Error} Will throw an error if validation fails or if the email or password is incorrect.
+ */
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -95,6 +122,15 @@ const loginUser = async (req, res) => {
   });
 };
 
+/**
+ * Handles user logout by clearing the JWT token and removing the token cookie.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.user - The authenticated user.
+ * @param {string} req.user._id - The ID of the user.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} A promise that resolves with no value.
+ */
 const logoutUser = async (req, res) => {
   const { _id } = req.user;
 
@@ -120,6 +156,19 @@ const getCurrentUsers = async (req, res) => {
   });
 };
 
+/**
+ * Updates the authenticated user's profile information, including handling avatar updates.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing user profile information.
+ * @param {Object} req.user - The authenticated user.
+ * @param {string} req.user._id - The ID of the user.
+ * @param {string} req.user.email - The current email of the user.
+ * @param {string} [req.file] - The uploaded file for the new avatar (optional).
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} A promise that resolves with no value.
+ * @throws {Error} Will throw an error if validation fails or if the email is already in use.
+ */
 const updateUser = async (req, res) => {
   const { error } = profileValidation.validate(req.body);
   if (error) {
@@ -171,6 +220,17 @@ const updateUser = async (req, res) => {
   });
 };
 
+/**
+ * Updates the authenticated user's subscription status.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing the new subscription status.
+ * @param {Object} req.user - The authenticated user.
+ * @param {string} req.user._id - The ID of the user.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} A promise that resolves with no value.
+ * @throws {Error} Will throw an error if validation fails.
+ */
 const updateUserSubscription = async (req, res) => {
   const { error } = subscriptionValidation.validate(req.body);
   if (error) {
