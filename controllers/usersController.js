@@ -8,11 +8,13 @@ import crypto from 'crypto';
 import 'dotenv/config';
 import { User } from '../models/usersModel.js';
 // prettier-ignore
-import { signupValidation, loginValidation, subscriptionValidation, profileValidation } from "../validations/validation.js";
+import { signupValidation, loginValidation, subscriptionValidation, profileValidation, emailValidation } from "../validations/validation.js";
 import { httpError } from '../helpers/httpError.js';
 import { setCookie, removeCookie } from '../helpers/cookie.js';
+import { sendEmail } from '../helpers/sendEmail.js';
+import { v4 as uuid4 } from 'uuid';
 
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, BASE_URL } = process.env;
 
 /**
  * Handles user signup by validating input, checking for existing users,
@@ -49,12 +51,23 @@ const signupUser = async (req, res) => {
   // Create a link to the user's avatar with gravatar
   const avatarURL = gravatar.url(email, { protocol: 'https' });
 
+  // Create a verificationToken for the user
+  const verificationToken = uuid4();
+
   const newUser = await User.create({
     firstName,
     lastName,
     email,
     password: hashPassword,
     avatarURL,
+    verificationToken,
+  });
+
+  // Send an email to the user's mail and specify a link to verify the email (/users/verify/:verificationToken) in the message
+  await sendEmail({
+    to: email,
+    subject: 'Action Required: Verify Your Email',
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click to verify email</a>`,
   });
 
   // Registration success response
@@ -65,6 +78,7 @@ const signupUser = async (req, res) => {
       email: newUser.email,
       subscription: newUser.subscription,
       avatarURL: newUser.avatarURL,
+      verificationToken,
     },
   });
 };
@@ -250,5 +264,76 @@ const updateUserSubscription = async (req, res) => {
   });
 };
 
+/**
+ * Handles email verification based on the verification token in the request parameters.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.params - The URL parameters of the request.
+ * @param {string} req.params.verificationToken - The verification token associated with the user.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} A promise that resolves with no value.
+ * @throws {Error} Will throw an error if the user with the verification token is not found.
+ */
+const getEmailVerification = async (req, res) => {
+  const { verificationToken } = req.params;
+
+  const user = await User.findOne({ verificationToken });
+
+  // Verification user Not Found
+  if (!user) {
+    throw httpError(400, 'User not found');
+  }
+
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: null,
+  });
+
+  // Verification success response
+  res.json({
+    message: 'Verification successful',
+  });
+};
+
+/**
+ * Resends the email verification link to the provided email address if the user exists and is not already verified.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing the email address.
+ * @param {string} req.body.email - The email address to which the verification email should be sent.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} A promise that resolves with no value.
+ * @throws {Error} Will throw an error if the email validation fails, the user is not found, or the email is already verified.
+ */
+const resendEmailVerification = async (req, res) => {
+  const { email } = req.body;
+
+  // Resending a email validation error
+  const { error } = emailValidation.validate(req.body);
+  if (error) {
+    throw httpError(400, error.message);
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw httpError(404, 'The provided email address could not be found');
+  }
+
+  // Resend email for verified user
+  if (user.verify) {
+    throw httpError(400, 'The email is already verified.');
+  }
+
+  await sendEmail({
+    to: email,
+    subject: 'Action Required: Verify Your Email',
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}">Click to verify email</a>`,
+  });
+
+  // Resending a email success response
+  res.json({ message: 'Verification email sent' });
+};
+
 // prettier-ignore
-export { signupUser, loginUser, logoutUser, getCurrentUsers, updateUserSubscription,  updateUser };
+export { signupUser, loginUser, logoutUser, getCurrentUsers, updateUserSubscription,  updateUser, getEmailVerification, resendEmailVerification};

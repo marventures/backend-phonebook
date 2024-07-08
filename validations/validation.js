@@ -87,5 +87,16 @@ const profileValidation = Joi.object({
     }),
 });
 
+// validation for email
+const emailValidation = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .required()
+    .messages({
+      'any.required': 'Missing required email field',
+      'string.email': 'Invalid email format',
+    }),
+});
+
 // prettier-ignore
-export { contactValidation, favoriteValidation, signupValidation, loginValidation, subscriptionValidation, profileValidation };
+export { contactValidation, favoriteValidation, signupValidation, loginValidation, subscriptionValidation, profileValidation, emailValidation };
