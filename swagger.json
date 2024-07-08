@@ -354,46 +354,46 @@
                 "required": ["firstName", "lastName", "email"]
               }
             }
-          },
-          "responses": {
-            "200": {
-              "description": "User information updated successfully",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "user": {
-                        "type": "object",
-                        "properties": {
-                          "firstName": {
-                            "type": "string"
-                          },
-                          "lastName": {
-                            "type": "string"
-                          },
-                          "email": {
-                            "type": "string"
-                          },
-                          "avatarURL": {
-                            "type": "string"
-                          }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User information updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "firstName": {
+                          "type": "string"
+                        },
+                        "lastName": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "avatarURL": {
+                          "type": "string"
                         }
                       }
                     }
                   }
                 }
               }
-            },
-            "400": {
-              "description": "Bad request. Validation error or missing required fields."
-            },
-            "401": {
-              "description": "Unauthorized. User not authenticated."
-            },
-            "409": {
-              "description": "Conflict. Email already in use."
             }
+          },
+          "400": {
+            "description": "Bad request. Validation error or missing required fields."
+          },
+          "401": {
+            "description": "Unauthorized. User not authenticated."
+          },
+          "409": {
+            "description": "Conflict. Email already in use."
           }
         }
       }
