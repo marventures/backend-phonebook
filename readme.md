@@ -75,6 +75,10 @@ Before you begin, ensure you have Node.js and MongoDB installed on your local ma
 
 - PUT `/api/users/info`: Update user information including avatar.
 
+- GET `/api/users/verify/{verificationToken}`: Verify email using verification token.
+
+- POST `/api/users/verify/`: Resend email verfication link.
+
 ##### Contacts
 
 - GET `/api/contacts`: Retrieve all contacts.
@@ -87,7 +91,7 @@ Before you begin, ensure you have Node.js and MongoDB installed on your local ma
 
 - DELETE `/api/contacts/{contactId}`: Delete a contact by ID.
 
-###### NOTE: Each endpoint except for `/signup` and `/login` requires authentication using JWT (Bearer token).
+###### NOTE: Each endpoint requires authentication using JWT (Bearer token) except for `/signup`, `/login` and `/verify/{verificationToken}`.
 
 ### Author
 
