@@ -3,6 +3,9 @@ import logger from 'morgan';
 import cors from 'cors';
 import { router as contactsRouter } from './routes/api/contactsRouter.js';
 import { router as usersRouter } from './routes/api/usersRouter.js';
+import swaggerUi from 'swagger-ui-express';
+import fs from 'fs';
+import path from 'path';
 
 const app = express();
 
@@ -14,6 +17,11 @@ app.use(express.json());
 
 app.use(express.static('public'));
 
+// Read Swagger JSON file
+const swaggerPath = path.join(process.cwd(), 'swagger.json');
+const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, 'utf8'));
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/contacts', contactsRouter);
 app.use('/api/users', usersRouter);
 
