@@ -110,5 +110,24 @@ const updateContactById = async (req, res) => {
   res.json(result);
 };
 
+const updateStatusContact = async (req, res) => {
+  // Preventing lack of necessary data for favorite (check validations folder)
+  const { error } = favoriteValidation.validate(req.body);
+  if (error) {
+    throw httpError(400, 'missing field favorite');
+  }
+
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+
+  if (!result) {
+    throw httpError(404);
+  }
+
+  res.json(result);
+};
+
 // prettier-ignore
 export { getAllContacts, getContactById, addContact, deleteContactById, updateContactById, updateStatusContact};
