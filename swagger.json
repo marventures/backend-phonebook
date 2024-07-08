@@ -420,6 +420,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized. User not authenticated."
           }
         }
       },
@@ -454,6 +457,9 @@
           },
           "400": {
             "description": "Bad request. Validation error or missing required fields."
+          },
+          "401": {
+            "description": "Unauthorized. User not authenticated."
           }
         }
       }
@@ -487,6 +493,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized. User not authenticated."
           },
           "404": {
             "description": "Contact not found"
@@ -535,6 +544,9 @@
           "400": {
             "description": "Bad request. Validation error or missing required fields."
           },
+          "401": {
+            "description": "Unauthorized. User not authenticated."
+          },
           "404": {
             "description": "Contact not found"
           }
@@ -561,6 +573,9 @@
         "responses": {
           "200": {
             "description": "Contact deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized. User not authenticated."
           },
           "404": {
             "description": "Contact not found"
