@@ -180,6 +180,9 @@
                         },
                         "avatarURL": {
                           "type": "string"
+                        },
+                        "verify": {
+                          "type": "boolean"
                         }
                       }
                     }
@@ -250,6 +253,9 @@
                         },
                         "avatarURL": {
                           "type": "string"
+                        },
+                        "verify": {
+                          "type": "boolean"
                         }
                       }
                     }
@@ -381,6 +387,12 @@
                         },
                         "avatarURL": {
                           "type": "string"
+                        },
+                        "verificationToken": {
+                          "type": "string"
+                        },
+                        "verify": {
+                          "type": "boolean"
                         }
                       }
                     }
