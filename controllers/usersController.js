@@ -78,7 +78,6 @@ const signupUser = async (req, res) => {
       email: newUser.email,
       subscription: newUser.subscription,
       avatarURL: newUser.avatarURL,
-      verificationToken,
     },
   });
 };
@@ -132,6 +131,7 @@ const loginUser = async (req, res) => {
       email: user.email,
       subscription: user.subscription,
       avatarURL: user.avatarURL,
+      verify: user.verify,
     },
   });
 };
@@ -157,7 +157,7 @@ const logoutUser = async (req, res) => {
 };
 
 const getCurrentUsers = async (req, res) => {
-  const { avatarURL, firstName, lastName, email, subscription } = req.user;
+  const { avatarURL, firstName, lastName, email, subscription, verify } = req.user;
 
   res.json({
     user: {
@@ -166,6 +166,7 @@ const getCurrentUsers = async (req, res) => {
       email,
       subscription,
       avatarURL,
+      verify,
     },
   });
 };
@@ -221,15 +222,29 @@ const updateUser = async (req, res) => {
     avatarURL = avatarURL.replace(/\\/g, '/');
   }
 
+  const verificationToken = uuid4();
+
+  await sendEmail({
+    to: email,
+    subject: 'Action Required: Verify Your Email',
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click to verify email</a>`,
+  });
+
   // Update user information
-  const updatedUser = await User.findByIdAndUpdate(_id, { ...req.body, avatarURL }, { new: true });
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    { ...req.body, avatarURL, verificationToken, verify: false },
+    { new: true }
+  );
 
   res.json({
     user: {
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
       email: updatedUser.email,
-      avatarURL: updatedUser.avatarURL, // Return updated avatarURL if it was updated
+      avatarURL: updatedUser.avatarURL,
+      verificationToken,
+      verify: false,
     },
   });
 };
