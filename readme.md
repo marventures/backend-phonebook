@@ -116,6 +116,8 @@ Before you begin, ensure you have Node.js and MongoDB installed on your local ma
 
 - [cors](https://www.npmjs.com/package/cors): Middleware to enable Cross-Origin Resource Sharing.
 - [morgan](https://www.npmjs.com/package/morgan): HTTP request logger middleware for Node.js.
+- [multer](https://www.npmjs.com/package/multer): Middleware for handling multipart/form-data,
+  primarily for file uploads.
 
 ### Utilities
 
@@ -124,10 +126,10 @@ Before you begin, ensure you have Node.js and MongoDB installed on your local ma
 - [gravatar](https://www.npmjs.com/package/gravatar): Library to retrieve Gravatar URLs.
 - [jimp](https://www.npmjs.com/package/jimp): Image processing library.
 - [joi](https://www.npmjs.com/package/joi): Schema validation library.
-- [multer](https://www.npmjs.com/package/multer): Middleware for handling multipart/form-data,
-  primarily for file uploads.
 - [nodemailer](https://www.npmjs.com/package/nodemailer): Library to send emails.
 - [uuid](https://www.npmjs.com/package/uuid): Library to generate unique identifiers.
+- [swagger-ui-express](https://www.npmjs.com/package/swagger-ui-express): Library to serve
+  auto-generated swagger-ui generated API docs from express.
 
 ### Development Tools
 
