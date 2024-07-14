@@ -17,8 +17,8 @@ endpoints for managing users and contacts.
 
 ## Project Overview
 
-This project is part of the GoIT Node.js Course Template Homework. It includes functionality for
-user authentication and CRUD operations on contacts.
+This project is a backend API for managing user authentication and CRUD operations on contacts. It
+is designed to provide a secure and efficient way to interact with a phonebook database.
 
 ## Usage
 
