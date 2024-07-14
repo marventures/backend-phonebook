@@ -43,9 +43,12 @@ Before you begin, ensure you have Node.js and MongoDB installed on your local ma
 
 3. Set environment variables: Create a .env file in the root directory with the following variables:
    ```
-   PORT=3000
-   MONGODB_URI=mongodb://localhost:27017/phonebook
-   JWT_SECRET=yoursecretkey
+    PORT=
+    DB_HOST=
+    SECRET_KEY=
+    GMAIL_EMAIL=
+    GMAIL_PASSWORD=
+    BASE_URL=
    ```
 
 ### Commands
