@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Phonebook",
+    "title": "Contacts Book",
     "version": "1.0.0",
-    "description": "Phonebook REST API"
+    "description": "Contacts Book REST API by Marvin Pacis"
   },
   "components": {
     "securitySchemes": {
